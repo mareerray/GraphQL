@@ -37,7 +37,7 @@ export function createLineGraph(xpTransactions, options = {}) {
         lineColor: '#B79AE3',
         pointColor: '#B79AE3',
         gridColor: '#eee',
-        textColor: '#4B3B53',
+        textColor: '#333',
         ...options
     };
 
@@ -68,15 +68,37 @@ export function createLineGraph(xpTransactions, options = {}) {
     points.forEach((pt, i) => {
         const color = getMarkerColor(dailyData[i].path);
         pointsSVG += `
-        <circle cx="${pt.x}" cy="${pt.y}" r="12" fill="transparent" pointer-events="all"/>
-        <circle cx="${pt.x}" cy="${pt.y}" r="5" fill="${color}" stroke="#fff" stroke-width="2">
-        <title>${dailyData[i].date}</title>
-        </circle>
+            <circle cx="${pt.x}" cy="${pt.y}" r="12" fill="transparent" pointer-events="all"/>
+            <circle cx="${pt.x}" cy="${pt.y}" r="5" fill="${color}" stroke="#fff" stroke-width="2">
+                <title>
+                    Date: ${dailyData[i].createdAt.split('T')[0]}
+                    Path: ${dailyData[i].path}
+                    XP: ${dailyData[i].totalXP.toLocaleString()}
+                </title>
+            </circle>
         `;
+
     });
+
+    const legendY = config.height - 15;
+    const legend = `
+    <g>
+        <rect x="${config.padding}" y="${legendY - 20}" width="320" height="30" rx="8" fill="#f7f7f7" stroke="#ccc"/>
+        <circle cx="${config.padding + 25}" cy="${legendY - 5}" r="7" fill="#AEEBFF"/>
+        <text x="${config.padding + 35}" y="${legendY}" font-size="14" fill="${config.textColor}">Checkpoint</text>
+        <circle cx="${config.padding + 135}" cy="${legendY - 5}" r="7" fill="#A9D566"/>
+        <text x="${config.padding + 145}" y="${legendY}" font-size="14" fill="${config.textColor}">Piscine</text>
+        <circle cx="${config.padding + 215}" cy="${legendY - 5}" r="7" fill="#FFD9A0"/>
+        <text x="${config.padding + 225}" y="${legendY}" font-size="14" fill="${config.textColor}">Project</text>
+    </g>
+    `;
 
     let svg = `
         <svg width="${config.width}" height="${config.height}" viewBox="0 0 ${config.width} ${config.height}">
+            <!-- Title -->
+            <text x="${config.width / 2}" y="20" text-anchor="middle" font-size="22" font-weight="bold" fill="${config.textColor}">
+            XP Progress Over Time
+            </text>
             <!-- Y-axis grid lines -->
             ${gridLines.map(yVal => {
                 const y = config.padding + (config.height - 2 * config.padding) - (yVal / yMax) * (config.height - 2 * config.padding);
@@ -93,12 +115,14 @@ export function createLineGraph(xpTransactions, options = {}) {
 
             <!-- Line path -->
             <path d="${points.map((pt, i) => (i === 0 ? `M${pt.x},${pt.y}` : `L${pt.x},${pt.y}`)).join(' ')}" 
-                  fill="none" 
-                  stroke="${config.lineColor}" 
-                  stroke-width="3"/>
+                    fill="none" 
+                    stroke="${config.lineColor}" 
+                    stroke-width="3"/>
 
             <!-- Colored Data points (one per day) -->
             ${pointsSVG}
+            <!-- Legend -->
+            ${legend}
         </svg>
     `;
 
@@ -145,7 +169,7 @@ export function createPieChart(typeTransaction, options = {}) {
             up: '#D4EAB2',
             down: '#B79AE3',
             stroke: '#00FF9B',
-            text: '#4B3B53'
+            text: '#333'
         },
         ...options
     };

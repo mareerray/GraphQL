@@ -21,7 +21,9 @@
     <div id="loginView">
         <div class="wrapper">
             <form id="loginForm" action="">
-                <h1>Login</h1>
+                <h1>Welcome!</h1>
+                <h2>Sign in to view your school info.</h2>
+
                 <div class="input-box">
                     <!-- <label for="login">Email / ID:</label><br> -->                    
                     <input type="text" id="login" placeholder="Enter email / ID" required>
@@ -34,7 +36,7 @@
                     <span class="icon"><i class="fa fa-lock"></i></span>
 
                 </div>
-                <button type="submit" value="submit" class="btn">Login</button>
+                <button type="submit" value="submit" class="btn">Sign In</button>
                 <div id="error-message" style="color: red; min-height: 1em; text-align: center;"></div>
             </form>
         </div> 
@@ -59,55 +61,51 @@
         </header>
 
         <!------- Main Section -------------------->
-        <div id="main-section">
-            <div id="content">
-                <!-- <h1>Welcome to the GraphQL API</h1>
-                <p>This is a simple GraphQL API example.</p>
-                <button id="fetch-data-button">Fetch Data</button>
-                <div id="data-container"></div> -->
-            </div>
-            <div id="rowA">
-                <div id="colA">
-                    <h1>User Information</h1>
-                    <div id="userInfo">
-                        <div id="userData"></div>
+        <div id="main-content">
+                <div id="rowA">
+                    <div id="colA">
+                        <h1>Student Information</h1>
+                        <div id="userInfo">
+                            <div id="userData"></div>
+                        <div id="dataInfo">
+                            <div id="expData"></div>
+                        </div>
+
+                        </div>
+                    </div>
+
+                    <div id="colB">
+                        <!-- <h1>Student Avatar</h1> -->
+                        <div id="userAvatar"></div>
                     </div>
                 </div>
 
-                <div id="colB">
-                    <h1>Experience</h1>
-                    <div id="dataInfo">
-                        <div id="expData"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="rowB">
-                <div id="graphExp">
-                </div>
-            </div>
-
-            <div id="rowC">
-                <div id="colC">
-                    <h2>Audit Ratio</h2>
-                    <div id="auditInfo">
-                        <div id="auditRatio"></div>
+                <div id="rowB">
+                    <div id="graphExp">
                     </div>
                 </div>
 
-                <div id="colD">
-                    <h2>Audit Done</h2>
-                    <div id="auditUpDown">
-                        <div id="auditType"></div>
+                <div id="rowC">
+                    <div id="colC">
+                        <h2>Audit Ratio</h2>
+                        <div id="auditInfo">
+                            <div id="auditRatio"></div>
+                        </div>
+                    </div>
+
+                    <div id="colD">
+                        <h2>Audit Done</h2>
+                        <div id="auditUpDown">
+                            <div id="auditType"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="rowD">
-                <div id="auditRatioBig"></div>
-                <div id="graphBar"></div>
-                <div id="graphPie"></div>
-            </div>
+                <div id="rowD">
+                    <div id="auditRatioBig"></div>
+                    <div id="graphBar"></div>
+                    <div id="graphPie"></div>
+                </div>
         </div>
 
     <!------Footer Section----------------------->
@@ -118,7 +116,7 @@
                 <nav>
                     <ul>
                         <li>Created by:</li>
-                        <li><a href="https://github.com/mareerray" target="_blank"> Mayuree 🍿 </a></li>
+                        <li><a href="https://github.com/mareerray" target="_blank"> Mayuree 🌻 </a></li>
                     </ul>
                 </nav>
             </div>

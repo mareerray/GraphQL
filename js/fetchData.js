@@ -73,9 +73,11 @@ const USER_QUERY = `
             firstName
             lastName
             login
+            campus
             auditRatio
             totalUp
             totalDown
+            attrs
         }
     }`;
 

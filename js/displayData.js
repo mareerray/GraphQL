@@ -35,6 +35,14 @@ function displayUserData(userData) {
         <p>Name: ${userData.firstName} ${userData.lastName}</p>
         <p>LoginID: ${userData.login}</p>
         <p>ID: ${userData.id}</p>
+        <p>Nationality: ${userData.attrs.nationality}</p>
+        <p>Campus: ${userData.campus}</p>
+    `;
+
+    const userAvatarDiv = document.getElementById('userAvatar');
+    // Set your static avatar image here
+    userAvatarDiv.innerHTML = `
+        <img src="assets/myAvatar.jpg" alt="My Avatar" style="width:230px; height:230px; border-radius:50%; object-fit:cover; box-shadow:0 2px 8px #0002;">
     `;
 }
 
@@ -65,7 +73,7 @@ function displayAuditInfo(user, typeTransaction) {
 function displayTotalXP(xpSum) {
     const xpDiv = document.getElementById('dataInfo');
     xpDiv.innerHTML = `
-    <p>Total: ${xpSum}</p>
+    <h2>Experience Total: ${xpSum}</h2>
     `;
 }
 // Line graph for xp prog //

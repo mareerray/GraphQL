@@ -4,7 +4,7 @@ const API = 'https://01.gritlab.ax/api/auth/signin';
 // Need to implement a refreshToken logic.
 
 // switch to from localStorage to sessionStorage
-export async function handleSubmit(event) {
+export async function loginHandler(event) {
     event.preventDefault();
 
     const loginInput = document.getElementById('login');
@@ -58,8 +58,9 @@ async function sendLoginRequest(encodedCredentials, errorMessage) {
             errorMessage.textContent = 'No token received from server.';
             return false;
         }
+        // Store JWT token securely in sessionStorage
+        sessionStorage.setItem('jwtToken', token);
 
-        storeToken(token); 
         errorMessage.textContent = ''; 
         return true;
 
@@ -68,11 +69,6 @@ async function sendLoginRequest(encodedCredentials, errorMessage) {
         errorMessage.textContent = 'Network error. Please check your connection.';
         return false;
     }
-}
-
-// Store JWT token securely in sessionStorage
-function storeToken(token) {
-    sessionStorage.setItem('jwtToken', token);
 }
 
 // Logout

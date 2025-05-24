@@ -1,4 +1,4 @@
-import { handleSubmit, handleLogout, switchToLoginView, switchToMainView } from './auth.js';
+import { loginHandler, handleLogout, switchToLoginView, switchToMainView } from './auth.js';
 import { renderData } from './displayData.js';
 
 
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const errorMessage = document.getElementById('error-message');
             if (errorMessage) errorMessage.textContent = '';
 
-            await handleSubmit(e);
+            await loginHandler(e);
 
             if (submitBtn) submitBtn.disabled = false;
 
