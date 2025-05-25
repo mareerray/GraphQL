@@ -1,18 +1,18 @@
 import { fetchAllData } from './fetchData.js';
-import { createLineGraph, createBarGraph, createPieChart } from './graph.js';
+import { createLineGraph, createBarGraph} from './graph.js';
+import { formatDisplayDate, getLastPathSegment } from './utils.js';
 
 export async function renderData() {
     try {
-        const { user, xpSum, xpTransaction, typeTransaction } = await fetchAllData();
+        const { user, xpSum, xpTransaction, typeTransaction, lastAudit } = await fetchAllData();
 
         // Populate user info
         // Populate tables
         // Use createLineGraph(data.xpTransaction) to create SVG and insert into DOM
-        // Use createPieChart(data.typeTransaction) for pie chart
         // ...etc...
 
         displayUserData(user);
-        displayAuditInfo(user, typeTransaction);
+        displayAuditInfo(user, typeTransaction, lastAudit);
         displayTotalXP(xpSum);
 
         displayLineGraph(xpTransaction);
@@ -46,18 +46,8 @@ function displayUserData(userData) {
     `;
 }
 
-function displayAuditInfo(user, typeTransaction) {
-    const auditRatio = document.getElementById('auditRatio');
+function displayAuditInfo(user, typeTransaction, lastAudit) {
     const auditType = document.getElementById('auditType')
-
-    const roundedAuditRatio = parseFloat(user.auditRatio).toFixed(1);  
-    
-    auditRatio.innerHTML = `
-        <p>Audit Ratio: ${roundedAuditRatio}</p>
-        <p>Audit Done XP: ${user.totalUp}</p>
-        <p>Audit Received XP: ${user.totalDown}</p>
-    `;
-
 
     const totalUp = typeTransaction.filter(t => t.type === 'up').length;
     const totalDown = typeTransaction.filter(t => t.type === 'down').length;
@@ -67,7 +57,11 @@ function displayAuditInfo(user, typeTransaction) {
         <p>Total Audits: ${total}</p>
         <p>Audits Given: ${totalUp}</p>
         <p>Audits Received: ${totalDown}</p>
-    `
+        <h2>Last Audit</h2>
+        <p>Date: ${lastAudit?.createdAt ? formatDisplayDate(lastAudit.createdAt) : '-'}</p>
+        <p>Auditor: ${lastAudit?.auditorLogin || '-'}</p>
+        <p>Project: ${lastAudit?.group?.path? getLastPathSegment(lastAudit.group.path): '-'}</p>
+    `;
 }
 
 function displayTotalXP(xpSum) {
@@ -84,17 +78,9 @@ function displayLineGraph(xpTransaction) {
     if (!graphExpDiv) return;
     graphExpDiv.innerHTML = createLineGraph(xpTransaction, {
         // Optional: Override defaults here
-        width: 700,
-        lineColor: '#6216d4'
+        width: 750,
     });
 }
-// Pie Graph //
-
-function displayAuditData(typeTransaction) {
-    const pieChartHTML = createPieChart(typeTransaction);
-    document.getElementById('graphPie').innerHTML = pieChartHTML;
-}
-
 
 // Bar Graph //
 function displayAuditRatioBig(user) {
@@ -113,24 +99,24 @@ function displayAuditRatioBig(user) {
             Number(auditRatio) === 0
         ) {
             displayHTML = `
-                <span style="font-size:2rem;color:#B79AE3;">N/A</span>
+                <span style="font-size:4rem;color:#F7F7F7;">N/A</span>
                 <span style="font-size:1.2rem;color:#4B3B53;">Audit Ratio</span>
             `;
         } else {
             const roundedAuditRatio = Number(auditRatio).toFixed(1);
             displayHTML = `
-                <span style="font-size:3rem;font-weight:bold;color:#B79AE3;">
+                <span style="font-size:4rem;font-weight:bold;color:#F7F7F7;">
                     ${roundedAuditRatio}
                 </span>
                 <span style="font-size:1.2rem;color:#4B3B53;margin-left:12px;">
-                    Audit Ratio
+                    Audits Ratio
                 </span>
             `;
         }
     } catch (e) {
         // Fallback for any unexpected errors
         displayHTML = `
-            <span style="font-size:2rem;color:#B79AE3;">N/A</span>
+            <span style="font-size:4rem;color:#F7F7F7;">N/A</span>
             <span style="font-size:1.2rem;color:#4B3B53;">Audit Ratio</span>
         `;
     }

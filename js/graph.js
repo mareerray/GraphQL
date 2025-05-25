@@ -1,3 +1,5 @@
+import { formatDisplayDate, getLastPathSegment, formatMonthYear } from './utils.js';
+
 export function createLineGraph(xpTransactions, options = {}) {
     if (!xpTransactions || xpTransactions.length === 0) {
         return '<p class="no-data">No XP data available</p>';
@@ -23,20 +25,31 @@ export function createLineGraph(xpTransactions, options = {}) {
     // Calculate cumulative XP
     let cumulativeXP = [];
     let runningTotal = 0;
+
     dailyData.forEach(day => {
         runningTotal += day.totalXP;
         cumulativeXP.push(runningTotal);
     });
+
+    const monthLabels = [];
+    let lastMonth = '';
+    dailyData.forEach((day, i) => {
+        const monthYear = formatMonthYear(day.createdAt);
+        if (monthYear !== lastMonth) {
+            monthLabels.push({ idx: i, label: monthYear });
+            lastMonth = monthYear;
+        }
+    });
+
 
     // Config with defaults; 
     // can be overridden if "options" or a new object of config is passed
     const config = {
         width: 1000,
         height: 400,
-        padding: 50,
-        lineColor: '#B79AE3',
-        pointColor: '#B79AE3',
-        gridColor: '#eee',
+        padding: 60,
+        lineColor: '#8968CD',   
+        gridColor: '#BFA980',   
         textColor: '#333',
         ...options
     };
@@ -63,33 +76,62 @@ export function createLineGraph(xpTransactions, options = {}) {
         return { x, y };
     });
 
+    const xLabelsSVG = monthLabels.map(({ idx, label }) => {
+    const pt = points[idx];
+    return `
+        <text x="${pt.x}" y="${config.height - config.padding + 18}" 
+                text-anchor="middle" font-size="12" fill="${config.textColor}">
+            ${label}
+        </text>
+        `;
+    }).join('');
+
+
     // Build colored markers for each point using getMarkerColor
     let pointsSVG = '';
     points.forEach((pt, i) => {
         const color = getMarkerColor(dailyData[i].path);
-        pointsSVG += `
-            <circle cx="${pt.x}" cy="${pt.y}" r="12" fill="transparent" pointer-events="all"/>
-            <circle cx="${pt.x}" cy="${pt.y}" r="5" fill="${color}" stroke="#fff" stroke-width="2">
-                <title>
-                    Date: ${dailyData[i].createdAt.split('T')[0]}
-                    Path: ${dailyData[i].path}
-                    XP: ${dailyData[i].totalXP.toLocaleString()}
-                </title>
-            </circle>
-        `;
+        const displayDate = formatDisplayDate(dailyData[i].date);
+        const displayPath = getLastPathSegment(dailyData[i].path);
+        
+        const tooltipWidth = 125;
+        const tooltipHeight = 55;
+        const tooltipOffset = 8; // space between marker and tooltip
+        const markerX = pt.x - tooltipWidth/2 - tooltipOffset - 38; // small left padding in tooltip
+        const textX = markerX + 12; // 14px to the right of the circle
 
+        pointsSVG += `
+        <g class="marker-group" tabindex="0">
+            <circle cx="${pt.x}" cy="${pt.y}" r="12" fill="transparent" pointer-events="all"/>
+            <circle cx="${pt.x}" cy="${pt.y}" r="5" fill="${color}" stroke="#fff" stroke-width="0.5"/>
+            <g class="svg-tooltip" style="pointer-events:none;">
+                <rect x="${pt.x - tooltipWidth - tooltipOffset}" y="${pt.y - tooltipHeight/2}" width="${tooltipWidth}" height="${tooltipHeight}" rx="8"/>
+                <text x="${pt.x - tooltipWidth/2 - tooltipOffset}" y="${pt.y - 10}" text-anchor="middle" font-size="10" fill="#333">Date: ${displayDate}</text>
+                <g>
+                    <circle cx="${markerX}" cy="${pt.y + 3}" r="6" fill="${color}" stroke="#fff" stroke-width="0.5"/>
+                    <text x="${textX}" y="${pt.y + 5}" font-size="10" fill="#333">
+                    ${displayPath}
+                    </text>
+                </g>           
+                <text x="${pt.x - tooltipWidth/2 - tooltipOffset -15}" y="${pt.y + 22}" text-anchor="middle" font-size="10" fill="#333">XP: ${dailyData[i].totalXP.toLocaleString()}</text>
+            </g>
+        </g>
+        `;
     });
 
-    const legendY = config.height - 15;
+    const legendWidth = 320;
+    const legendX = (config.width - legendWidth) / 2;
+    const legendY = config.height - 23; // move further down if needed
+
     const legend = `
-    <g>
-        <rect x="${config.padding}" y="${legendY - 20}" width="320" height="30" rx="8" fill="#f7f7f7" stroke="#ccc"/>
-        <circle cx="${config.padding + 25}" cy="${legendY - 5}" r="7" fill="#AEEBFF"/>
-        <text x="${config.padding + 35}" y="${legendY}" font-size="14" fill="${config.textColor}">Checkpoint</text>
-        <circle cx="${config.padding + 135}" cy="${legendY - 5}" r="7" fill="#A9D566"/>
-        <text x="${config.padding + 145}" y="${legendY}" font-size="14" fill="${config.textColor}">Piscine</text>
-        <circle cx="${config.padding + 215}" cy="${legendY - 5}" r="7" fill="#FFD9A0"/>
-        <text x="${config.padding + 225}" y="${legendY}" font-size="14" fill="${config.textColor}">Project</text>
+    <g transform="translate(${legendX},${legendY})">
+        <rect x="0" y="0" width="${legendWidth}" height="30" rx="8" fill="none" stroke="none"/>
+        <circle cx="29" cy="15" r="7" fill="#FFB7B2" stroke="#fff" stroke-width="0.5"/> 
+        <text x="40" y="20" font-size="14" fill="${config.textColor}">Checkpoint</text>
+        <circle cx="139" cy="15" r="7" fill="#BFA2DB" stroke="#fff" stroke-width="0.5"/>
+        <text x="150" y="20" font-size="14" fill="${config.textColor}">Piscine</text>
+        <circle cx="219" cy="15" r="7" fill="#AEEBFF" stroke="#fff" stroke-width="0.5"/>
+        <text x="230" y="20" font-size="14" fill="${config.textColor}">Project</text>
     </g>
     `;
 
@@ -112,12 +154,14 @@ export function createLineGraph(xpTransactions, options = {}) {
 
             <!-- X-axis line -->
             <line x1="${config.padding}" y1="${config.height - config.padding}" x2="${config.width - config.padding}" y2="${config.height - config.padding}" stroke="${config.textColor}"/>
+            <!-- X-axis labels -->
+            ${xLabelsSVG}
 
             <!-- Line path -->
             <path d="${points.map((pt, i) => (i === 0 ? `M${pt.x},${pt.y}` : `L${pt.x},${pt.y}`)).join(' ')}" 
                     fill="none" 
                     stroke="${config.lineColor}" 
-                    stroke-width="3"/>
+                    stroke-width="2"/>
 
             <!-- Colored Data points (one per day) -->
             ${pointsSVG}
@@ -146,110 +190,15 @@ function groupTransactionsByDate(transactions) {
 
 function getMarkerColor(path) {
     if (path.includes('checkpoint')) {
-        return '#AEEBFF'; 
+    return '#FFB7B2'; 
+
     }
     if (path.includes('piscine-')) {
-        return '#A9D566'; 
+        return '#BFA2DB'; 
     }
-    return '#FFD9A0'; 
+    return '#AEEBFF'; 
+
 }
-
-
-// ---- PieChart ---- //
-export function createPieChart(typeTransaction, options = {}) {
-    const { upCount, downCount } = calculateAuditCounts(typeTransaction);
-    const total = upCount + downCount;
-    
-    // Default configuration
-    const config = {
-        size: 300,
-        radius: 40,
-        center: 50,
-        colors: {
-            up: '#D4EAB2',
-            down: '#B79AE3',
-            stroke: '#00FF9B',
-            text: '#333'
-        },
-        ...options
-    };
-
-    if (total === 0) {
-        return '<p class="no-data">No audit data available</p>';
-    }
-
-    const upPercentage = Math.round((upCount / total) * 100);
-    const downPercentage = Math.round((downCount / total) * 100);
-
-    return `
-        <svg viewBox="0 0 100 100" 
-             width="${config.size}" 
-             height="${config.size}"
-             aria-label="Pie chart showing audit distribution">
-            ${createArcPaths(upCount, downCount, config)}
-            ${createCenterLabels(upCount, downCount, upPercentage, downPercentage, config)}
-        </svg>
-    `;
-}
-
-// Helper functions for pie chart
-function calculateAuditCounts(transactions) {
-    const upCount = transactions.filter(t => t.type === 'up').length;
-    const downCount = transactions.filter(t => t.type === 'down').length;
-    return { upCount, downCount };
-}
-
-function createArcPaths(upCount, downCount, { center, radius, colors }) {
-    const total = upCount + downCount;
-    const upAngle = (upCount / total) * 360;
-    
-    return `
-        <circle cx="${center}" cy="${center}" r="${radius}" 
-                fill="transparent" stroke="${colors.stroke}" stroke-width="2" />
-        <path d="${describeArc(center, center, radius, -90, -90 + upAngle)}" 
-                fill="${colors.up}" />
-        <path d="${describeArc(center, center, radius, -90 + upAngle, -90 + 360)}" 
-                fill="${colors.down}" />
-    `;
-}
-
-function createCenterLabels(upCount, downCount, upPct, downPct, { center, colors }) {
-    const labelY = center - 5;
-    return `
-        <text x="${center}" y="${labelY - 2}" text-anchor="middle" 
-            font-size="6" fill="${colors.text}">
-            Up: ${upCount} (${upPct}%)
-        </text>
-        <text x="${center}" y="${labelY + 14}" text-anchor="middle" 
-            font-size="6" fill="${colors.text}">
-            Down: ${downCount} (${downPct}%)
-        </text>
-    `;
-}
-
-// Keep these as private helpers
-function describeArc(x, y, radius, startAngle, endAngle) {
-    const start = polarToCartesian(x, y, radius, endAngle);
-    const end = polarToCartesian(x, y, radius, startAngle);
-    const largeArc = endAngle - startAngle <= 180 ? "0" : "1";
-
-    return [
-        "M", x, y,
-        "L", start.x, start.y,
-        "A", radius, radius, 0, largeArc, 0, end.x, end.y,
-        "L", x, y, "Z"
-    ].join(" ");
-}
-
-function polarToCartesian(centerX, centerY, radius, angleDeg) {
-    const angleRad = (angleDeg - 90) * Math.PI / 180;
-    return {
-        x: centerX + radius * Math.cos(angleRad),
-        y: centerY + radius * Math.sin(angleRad)
-    };
-}
-
-
 
 // --- Bar Graph --- //
 
@@ -260,7 +209,7 @@ export function createBarGraph(auditData, options = {}) {
     const config = {
         width: 300,
         height: 180,
-        barColors: ['#FFD9A0', '#AEEBFF'],
+        barColors: ['#D69A6D', '#A3A8A3'],
         ...options
     };
 
@@ -273,7 +222,7 @@ export function createBarGraph(auditData, options = {}) {
     const maxValue = Math.max(...values) * 1.1; // Add 11% headroom
 
     const barWidth = config.width / (values.length * 2);
-    const gap = barWidth / 3;
+    const gap = barWidth / 2;
 
     let bars = '';
     values.forEach((val, i) => {
@@ -293,3 +242,5 @@ export function createBarGraph(auditData, options = {}) {
         </svg>
     `;
 }
+
+

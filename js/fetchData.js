@@ -13,6 +13,8 @@ export async function fetchAllData() {
         console.log(xpTransactionData);
         const typeTransactionData = await executeQuery(TYPE_TRANSACTION_QUERY, token);
         console.log(typeTransactionData);
+        const lastAuditData = await executeQuery(LAST_AUDIT_QUERY, token);
+        console.log(lastAuditData);
 
         // consider error handling here in case of the query is returning an empty array
         // or null, this might break UI or show undefined.
@@ -20,7 +22,8 @@ export async function fetchAllData() {
             user: userData.user[0],
             xpSum: xpSumData.transaction_aggregate.aggregate.sum.amount,
             xpTransaction: xpTransactionData.transaction,
-            typeTransaction: typeTransactionData.transaction
+            typeTransaction: typeTransactionData.transaction,
+            lastAudit: lastAuditData.audit[0]
         };
     } catch (error) {
         console.error('Error fetching data:', error)
@@ -113,4 +116,19 @@ const TYPE_TRANSACTION_QUERY = `
         type
         }
     }
-`
+`;
+
+const LAST_AUDIT_QUERY = `
+    query {
+        audit(
+        order_by: [{ createdAt: desc }]
+        limit: 1
+        ) {
+        group {
+            path
+        }
+        auditorLogin
+        createdAt
+        }
+    }
+`;

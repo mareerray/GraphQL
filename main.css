@@ -68,7 +68,11 @@
 }
 
 #graphExp svg {
-    transform: translateX(35px); /* Adjust as needed */
+    transform: translateX(33px); /* Adjust as needed */
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    display: block;
 }
 
 #colA, #colB, #colC, #colD{
@@ -78,12 +82,11 @@
     padding: 16px;       
     width: calc(100vw - 9vw);   
     max-width: 900px;      
-    /* border: 3px solid #9F6BEA; */
     border-radius: 8px;                
     transition: box-shadow 0.2s;
 }
 
-#colA {
+#colA{
     flex: 7;
     margin-left: 50px;
 }
@@ -93,14 +96,40 @@
     margin-right: 90px;
 }
 
-#colA h1 {
-    margin-top: 15px;
+#colC {
+    flex: 7;
+    margin-right: 30px;
+    text-align: right;
+}
+
+#colD {
+    flex: 3;
+    margin-right: 50px;
+}
+
+#colA, #colC h1 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+h2 {
+    font-size: 1.7rem;
+    color: #333;
+    margin-top: 20px;
 }
 
 #colA p {
     font-size: 1.2rem;
     color: #333;
     line-height: 1.5;
+}
+
+#colC p {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.5;
+    margin-top: 5px;
 }
 
 #userInfo, #dataInfo {
@@ -122,23 +151,34 @@
     margin: 0 auto;
 }
 
-
 #circle svg {
     text-align: center;
 }
 
 #auditRatioBig {
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
-#graphExp svg {
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    display: block;
+/* ---------------- */
+
+/* Tooltip Styling */
+.marker-group .svg-tooltip {
+    opacity: 0;
+    transition: opacity 0.2s;
 }
 
+.marker-group:hover .svg-tooltip,
+.marker-group:focus .svg-tooltip {
+    opacity: 1;
+}
+
+.marker-group .svg-tooltip rect {
+    fill: whitesmoke;
+    opacity: 0.9;
+    stroke-width: 1;
+    filter: drop-shadow(0 2px 8px rgba(50,30,80,0.10));
+}
 
 /* ---------------- */
 
@@ -158,11 +198,10 @@
     z-index: 1000;
 }
 
-
 .logo {
     font-size: 24px;
     font-weight: bold;
-    margin-left: 30px;
+    margin-left: 45px;
 }
 
 #nav-bar a {
@@ -173,22 +212,20 @@
     transition: color 0.2s;
 }
 
-
 #logout-button {
-    background-color: #9F6BEA; /* Button background color */
-    color: #555; /* Button text color */
+    background-color: #D69A6D; /* Button background color */
+    color: #333; /* Button text color */
     font-weight: bold;
     border: none;
     border-radius: 5px;
     padding: 8px 12px;
-    margin-right: 30px;
+    margin-right: 50px;
     cursor: pointer;
 }
 
 #logout-button:hover {
     background-color: #9F6BEA; /* Darker shade on hover */
 }
-
 
 /* Footer */
 
@@ -212,7 +249,7 @@
 }
 
 #footer p {
-    margin-left: 30px;
+    margin-left: 50px;
     font-size: 16px;
 }
 
@@ -220,7 +257,7 @@
     display: flex;
     list-style: none;
     align-items: center; /* Center links horizontally */
-    margin: 0 auto;
+    margin: 0 40px;
     padding: 0 20px;
     gap: 10px;
 }
@@ -235,14 +272,6 @@
     align-items: center; 
     transition: color 0.3s ease;
 }
-
-/* #footer a {
-    color: #fdf9a1;
-    text-decoration: none;
-    font-weight: bold;
-    margin-left: 6px;
-    transition: color 0.2s;
-} */
 
 #footer nav ul li a:hover {
     color: #999;
@@ -262,3 +291,18 @@
         padding: 8px;
     }
 }
+
+/*
+        lineColor: #8968CD  
+        gridColor: #BFA980  
+        textColor: #333
+        checkpoint: #FFB7B2
+        piscine: #BFA2DB
+        project: #AEEBFF
+        Gold: #D69A6D (Bronze-Gold)
+        Gunmetal: #A3A8A3 (Deep Platinum/Gunmetal)
+        Champagne Platinum: #F6E7CE
+        Pastel Blue: #A7C7E7
+        pastel purple: #BFA2DB
+       
+*/
