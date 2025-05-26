@@ -200,7 +200,7 @@ function getMarkerColor(path) {
 
 }
 
-// --- Bar Graph --- //
+// --- First Bar Graph --- //
 
 export function createBarGraph(auditData, options = {}) {
     // auditData: { totalUp, totalDown }
@@ -243,4 +243,53 @@ export function createBarGraph(auditData, options = {}) {
     `;
 }
 
+// --- Second Bar Graph --- //
 
+export function createSecondBarGraph(xpTransaction, options = {}) {
+// Aggregate XP by project (excluding piscine/checkpoint)
+    const projectXP = {};
+    xpTransaction.forEach(tx => {
+        const pathLower = tx.path.toLowerCase();
+        if (!pathLower.includes('piscine') && !pathLower.includes('checkpoint')) {
+        const project = getLastPathSegment(tx.path);
+        if (!projectXP[project]) projectXP[project] = 0;
+        projectXP[project] += tx.amount;
+        }
+    });
+
+    const labels = Object.keys(projectXP);
+    const values = Object.values(projectXP);
+
+    labels.reverse();
+    values.reverse();
+
+    if (!labels.length) return '<p>No project XP data available.</p>';
+
+    const config = {
+        width: 850,
+        height: 300,
+        barColor: '#B76E79',
+        ...options
+    };
+    const barWidth = (config.width - 60) / labels.length;
+    const maxValue = Math.max(...values) * 1.1;
+
+    let bars = '';
+
+    labels.forEach((label, i) => {
+        const barHeight = (values[i] / maxValue) * (config.height - 60);
+        const x = 40 + i * barWidth;
+        const y = config.height - barHeight - 30;
+        bars += `
+        <rect x="${x}" y="${y}" width="${barWidth - 10}" height="${barHeight}" fill="${config.barColor}" rx="5"/>
+        <text x="${x + (barWidth - 10) / 2}" y="${y - 25}" text-anchor="middle" font-size="12" fill="#333">(${label})</text>
+        <text x="${x + (barWidth - 10) / 2}" y="${y - 8}" text-anchor="middle" font-size="12" fill="#333">${values[i]}</text>
+        `;
+    });
+
+    return `
+        <svg width="100%" height="auto" viewBox="0 0 ${config.width} ${config.height}" aria-label="XP by Project">
+        ${bars}
+        </svg>
+    `;
+}

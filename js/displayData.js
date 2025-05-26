@@ -1,5 +1,5 @@
 import { fetchAllData } from './fetchData.js';
-import { createLineGraph, createBarGraph} from './graph.js';
+import { createLineGraph, createBarGraph, createSecondBarGraph} from './graph.js';
 import { formatDisplayDate, getLastPathSegment } from './utils.js';
 
 export async function renderData() {
@@ -18,7 +18,7 @@ export async function renderData() {
         displayLineGraph(xpTransaction);
         displayAuditBarGraph(user);
         displayAuditRatioBig(user);
-        displayAuditData(typeTransaction);
+        displayProjectBarGraph(xpTransaction);
 
     } catch (err) {
         console.error('Error fetching data:', err)
@@ -42,7 +42,7 @@ function displayUserData(userData) {
     const userAvatarDiv = document.getElementById('userAvatar');
     // Set your static avatar image here
     userAvatarDiv.innerHTML = `
-        <img src="assets/smileyRobotAnime.png" alt="My Avatar" style="width:230px; height:230px; border-radius:50%; object-fit:cover; box-shadow:0 2px 8px #0002;">
+        <img src="assets/userAvatar.jpeg" alt="My Avatar" class="avatar-img">
     `;
 }
 
@@ -134,3 +134,11 @@ function displayAuditBarGraph(user) {
     document.getElementById('graphBar').innerHTML = barGraphSVG;
 }
 
+export function displayProjectBarGraph(xpTransaction) {
+    const rowD = document.getElementById('rowD');
+    if (!rowD) return;
+    rowD.innerHTML = `
+        <h2 style="margin-bottom: 16px;">XP by Project</h2>
+        ${createSecondBarGraph(xpTransaction, { barColor: '#B76E79' })}
+    `;
+}

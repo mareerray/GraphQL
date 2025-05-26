@@ -3,21 +3,20 @@ export async function fetchAllData() {
         const token = sessionStorage.getItem('jwtToken');
         if (!token) throw new Error('No token available');
 
-        // consider using Promise.all()
-        // check Line 117
+        // Fetch user data first to get the login
         const userData = await executeQuery(USER_QUERY, token);
         console.log(userData);
+        const userLogin = userData.user[0].login;
+
         const xpSumData = await executeQuery(XP_SUM_QUERY, token);
         console.log(xpSumData);
         const xpTransactionData = await executeQuery(XP_TRANSACTIONS_QUERY, token);
         console.log(xpTransactionData);
         const typeTransactionData = await executeQuery(TYPE_TRANSACTION_QUERY, token);
         console.log(typeTransactionData);
-        const lastAuditData = await executeQuery(LAST_AUDIT_QUERY, token);
+        const lastAuditData = await executeQuery(LAST_AUDIT_QUERY, token, { login: userLogin });
         console.log(lastAuditData);
 
-        // consider error handling here in case of the query is returning an empty array
-        // or null, this might break UI or show undefined.
         return {
             user: userData.user[0],
             xpSum: xpSumData.transaction_aggregate.aggregate.sum.amount,
@@ -31,7 +30,7 @@ export async function fetchAllData() {
     }
 }
 
-async function executeQuery(query, token) {
+async function executeQuery(query, token, variables = {}) {
     try {
         const response = await fetch('https://01.gritlab.ax/api/graphql-engine/v1/graphql', {
         method: 'POST',
@@ -39,7 +38,7 @@ async function executeQuery(query, token) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({ query, variables }),
     });
 
     // if (!response.ok) throw new Error('Failed to fetch data');
@@ -119,8 +118,9 @@ const TYPE_TRANSACTION_QUERY = `
 `;
 
 const LAST_AUDIT_QUERY = `
-    query {
+    query GetLastUserAudit($login: String!){
         audit(
+        where: { auditorLogin: { _eq: $login } }
         order_by: [{ createdAt: desc }]
         limit: 1
         ) {
