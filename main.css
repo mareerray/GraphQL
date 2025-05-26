@@ -205,7 +205,7 @@ h2 {
 }
 
 #nav-bar a {
-    color: #9F6BEA;
+    color: #3764c6;
     text-decoration: none;
     font-weight: bold;
     margin-left: 6px;
@@ -214,7 +214,7 @@ h2 {
 
 #logout-button {
     background-color: #D69A6D; /* Button background color */
-    color: #333; /* Button text color */
+    color: #3764c6; /* Button text color */
     font-weight: bold;
     border: none;
     border-radius: 5px;
@@ -263,7 +263,7 @@ h2 {
 }
 
 #footer nav ul li a {
-    color: #9F6BEA;
+    color: #3764c6;
     text-decoration: none;
     font-size: 16px;
     font-weight: bold;

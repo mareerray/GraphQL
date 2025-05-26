@@ -42,7 +42,7 @@ function displayUserData(userData) {
     const userAvatarDiv = document.getElementById('userAvatar');
     // Set your static avatar image here
     userAvatarDiv.innerHTML = `
-        <img src="assets/myAvatar.jpg" alt="My Avatar" style="width:230px; height:230px; border-radius:50%; object-fit:cover; box-shadow:0 2px 8px #0002;">
+        <img src="assets/smileyRobotAnime.png" alt="My Avatar" style="width:230px; height:230px; border-radius:50%; object-fit:cover; box-shadow:0 2px 8px #0002;">
     `;
 }
 
