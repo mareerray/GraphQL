@@ -80,7 +80,8 @@ function displayProgressLineGraph(xpTransaction) {
     graphExpDiv.innerHTML = createProgressLineGraph(xpTransaction, {
         // Optional: Override defaults here
         width: 1000,
-        height: 600
+        height: 600,
+        padding: 100,
     });
 }
 
