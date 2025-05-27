@@ -57,7 +57,7 @@ function displayAuditInfo(user, typeTransaction, lastAudit) {
         <p>Total Audits: ${total}</p>
         <p>Audits Given: ${totalUp}</p>
         <p>Audits Received: ${totalDown}</p>
-        <h2>Last Audit</h2>
+        <h2>Last Given Audit</h2>
         <p>Date: ${lastAudit?.createdAt ? formatDisplayDate(lastAudit.createdAt) : '-'}</p>
         <p>Auditor: ${lastAudit?.auditorLogin || '-'}</p>
         <p>Captain: ${lastAudit?.group.captainLogin || '-'}</p>
