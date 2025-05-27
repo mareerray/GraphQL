@@ -47,7 +47,7 @@ export function createProgressLineGraph(xpTransactions, options = {}) {
     const config = {
         width: 1000,
         height: 600,
-        padding: 60,
+        padding: 100,
         lineColor: '#8968CD',   
         gridColor: '#BFA980',   
         textColor: '#333',
