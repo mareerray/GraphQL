@@ -60,6 +60,7 @@ function displayAuditInfo(user, typeTransaction, lastAudit) {
         <h2>Last Audit</h2>
         <p>Date: ${lastAudit?.createdAt ? formatDisplayDate(lastAudit.createdAt) : '-'}</p>
         <p>Auditor: ${lastAudit?.auditorLogin || '-'}</p>
+        <p>Captain: ${lastAudit?.group.captainLogin || '-'}</p>
         <p>Project: ${lastAudit?.group?.path? getLastPathSegment(lastAudit.group.path): '-'}</p>
     `;
 }
