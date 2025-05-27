@@ -79,7 +79,8 @@ function displayProgressLineGraph(xpTransaction) {
     if (!graphExpDiv) return;
     graphExpDiv.innerHTML = createProgressLineGraph(xpTransaction, {
         // Optional: Override defaults here
-        width: 750,
+        width: 1000,
+        height: 600
     });
 }
 
