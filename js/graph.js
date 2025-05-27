@@ -45,8 +45,8 @@ export function createProgressLineGraph(xpTransactions, options = {}) {
     // Config with defaults; 
     // can be overridden if "options" or a new object of config is passed
     const config = {
-        width: 1200,
-        height: 400,
+        width: 1000,
+        height: 600,
         padding: 60,
         lineColor: '#8968CD',   
         gridColor: '#BFA980',   
