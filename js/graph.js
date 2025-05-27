@@ -90,9 +90,12 @@ export function createProgressLineGraph(xpTransactions, options = {}) {
     // Build colored markers for each point using getMarkerColor
     let pointsSVG = '';
     points.forEach((pt, i) => {
-        const color = getMarkerColor(dailyData[i].path);
+        const path = dailyData[i].path;
+        const color = getMarkerColor(path);
         const displayDate = formatDisplayDate(dailyData[i].date);
-        const displayPath = getLastPathSegment(dailyData[i].path);
+        const displayPath = path.includes('checkpoint') 
+            ? 'checkpoint'
+            : getLastPathSegment(path);
         
         const tooltipWidth = 125;
         const tooltipHeight = 55;
