@@ -141,7 +141,7 @@ export function createProgressLineGraph(xpTransactions, options = {}) {
     let svg = `
         <svg width="${config.width}" height="${config.height}" viewBox="0 0 ${config.width} ${config.height}">
             <!-- Title -->
-            <text x="${config.width / 2}" y="20" text-anchor="middle" font-size="22" font-weight="bold" fill="${config.textColor}">
+            <text x="${config.width / 2}" y="20" text-anchor="middle" font-size="28" font-weight="bold" fill="${config.textColor}">
             XP Progress Over Time
             </text>
             <!-- Y-axis grid lines -->
