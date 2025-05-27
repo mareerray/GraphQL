@@ -118,17 +118,18 @@ const TYPE_TRANSACTION_QUERY = `
 `;
 
 const LAST_AUDIT_QUERY = `
-    query GetLastUserAudit($login: String!){
+    query GetLastAuditByUser($login: String!){
         audit(
         where: { auditorLogin: { _eq: $login } }
-        order_by: [{ createdAt: desc }]
+        order_by: [{ updatedAt: desc }]
         limit: 1
         ) {
         group {
+        captainLogin
             path
         }
         auditorLogin
-        createdAt
+        updatedAt
         }
     }
 `;
