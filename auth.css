@@ -13,8 +13,6 @@ body {
     align-items: center;
     min-height: 100vh;
     background: url('assets/flowerbg.jpg') no-repeat;
-    /* background: url('assets/imagebg_4.jpg') no-repeat; */
-    /* background: url('assets/imagebg_9.jpg') no-repeat; */
     background-size: cover;
     background-position: center;
 }
@@ -51,11 +49,6 @@ body {
     position: relative;
 }
 
-/* .input-box label {
-    padding: 20px 45px;
-    font-size: 1em;
-} */
-
 .input-box input {
     width: 100%;
     height: 100%;
@@ -74,12 +67,12 @@ body {
 
 .input-box .icon {
     position: absolute;
-    left: 20px; /* Adjust as needed */
+    left: 20px; 
     top: 50%;
     transform: translateY(-50%);
     color: #888;
     font-size: 20px;
-    pointer-events: none; /* So the icon doesn't block input clicks */
+    pointer-events: none; 
     z-index: 2;
 }
 
@@ -97,24 +90,3 @@ body {
     font-weight: 600;
     margin-top: 5px;;
 }
-
-
-
-/* h3 {
-    font-size: 1.5em;
-    color: #999;
-    text-align: center;
-    margin-top: 10px;
-}    */
-
-
-
-/*
-      '#ecb5ff', // Purple
-      '#ffa0ab', // Pink
-      '#8cffb4', // Green
-      '#ff8666', // Orange
-      '#80c3f5', // Blue
-      '#c2e77d', // Lime
-      '#fdf9a1'  // Yellow
-*/

@@ -1,4 +1,4 @@
-import { loginHandler, handleLogout, switchToLoginView, switchToMainView } from './auth.js';
+import { loginHandler, handleLogout, showLogin, showDashboard } from './auth.js';
 import { renderData } from './displayData.js';
 
 
@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Token: ", token);
     
     if (token) {
-        switchToMainView();
+        showDashboard();
         renderData();
     } else {
-        switchToLoginView(); 
+        showLogin(); 
     }
 
 
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (sessionStorage.getItem('jwtToken')) {
                 console.log("Login Successful")
-                switchToMainView();
+                showDashboard();
                 renderData();
 
             }

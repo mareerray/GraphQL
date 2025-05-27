@@ -1,9 +1,5 @@
 const API = 'https://01.gritlab.ax/api/auth/signin';
 
-// What would happen if the user has to refresh their token
-// Need to implement a refreshToken logic.
-
-// switch to from localStorage to sessionStorage
 export async function loginHandler(event) {
     event.preventDefault();
 
@@ -19,16 +15,15 @@ export async function loginHandler(event) {
     const credentials = `${loginInput.value}:${passwordInput.value}`;
     const encodedCredentials = btoa(credentials);
 
-    await sendLoginRequest(encodedCredentials, errorMessage);
+    await submitLogin(encodedCredentials, errorMessage);
 }
 
 // Send login request to the API
-async function sendLoginRequest(encodedCredentials, errorMessage) {
+async function submitLogin(encodedCredentials, errorMessage) {
     try { 
         const response = await fetch(API, {
             method: 'POST',
             headers: {
-                // 'Content-Type': 'application/json', // Removed cuz no body request
                 'Authorization': `Basic ${encodedCredentials}`,
                 'Accept': 'application/json' // added security
             },
@@ -46,8 +41,6 @@ async function sendLoginRequest(encodedCredentials, errorMessage) {
             return false; // Stop further processing
         }
 
-        // const token = await response.json();
-        // console.log("Token:",token)
         let token = await response.json();
         if (typeof token === 'object' && token.token) {
             token = token.token;
@@ -76,11 +69,11 @@ async function sendLoginRequest(encodedCredentials, errorMessage) {
 export function handleLogout() {
     sessionStorage.removeItem('jwtToken'); 
     sessionStorage.clear(); // clear token when logout
-    switchToLoginView(); 
+    showLogin(); 
 }
 
 
-export function switchToMainView() {
+export function showDashboard() {
     console.log("Switching to MAIN view");
     document.getElementById('loginView').style.display = 'none';
     document.getElementById('nav-bar').style.display = 'flex';
@@ -88,7 +81,7 @@ export function switchToMainView() {
     document.getElementById('footer').hidden = false;
 }
 
-export function switchToLoginView() {
+export function showLogin() {
     console.log("Switching to LOGIN page");
     document.getElementById('loginView').style.display = 'flex';
     document.getElementById('nav-bar').style.display = 'none';

@@ -1,5 +1,5 @@
 import { fetchAllData } from './fetchData.js';
-import { createLineGraph, createBarGraph, createSecondBarGraph} from './graph.js';
+import { createProgressLineGraph, createAuditBarGraph, createProjectBarGraph} from './graph.js';
 import { formatDisplayDate, getLastPathSegment } from './utils.js';
 
 export async function renderData() {
@@ -8,16 +8,16 @@ export async function renderData() {
 
         // Populate user info
         // Populate tables
-        // Use createLineGraph(data.xpTransaction) to create SVG and insert into DOM
+        // Use createProgressLineGraph(data.xpTransaction) to create SVG and insert into DOM
         // ...etc...
 
         displayUserData(user);
         displayAuditInfo(user, typeTransaction, lastAudit);
         displayTotalXP(xpSum);
 
-        displayLineGraph(xpTransaction);
+        displayProgressLineGraph(xpTransaction);
         displayAuditBarGraph(user);
-        displayAuditRatioBig(user);
+        displayAuditRatioNum(user);
         displayProjectBarGraph(xpTransaction);
 
     } catch (err) {
@@ -72,18 +72,18 @@ function displayTotalXP(xpSum) {
 }
 // Line graph for xp prog //
 
-function displayLineGraph(xpTransaction) {
+function displayProgressLineGraph(xpTransaction) {
     const graphExpDiv = document.getElementById('graphExp');
 
     if (!graphExpDiv) return;
-    graphExpDiv.innerHTML = createLineGraph(xpTransaction, {
+    graphExpDiv.innerHTML = createProgressLineGraph(xpTransaction, {
         // Optional: Override defaults here
         width: 750,
     });
 }
 
 // Bar Graph //
-function displayAuditRatioBig(user) {
+function displayAuditRatioNum(user) {
     const auditRatioBigDiv = document.getElementById('auditRatioBig');
     if (!auditRatioBigDiv) return;
 
@@ -130,7 +130,7 @@ function displayAuditBarGraph(user) {
         totalUp: user.totalUp,
         totalDown: user.totalDown
     };
-    const barGraphSVG = createBarGraph(auditData);
+    const barGraphSVG = createAuditBarGraph(auditData);
     document.getElementById('graphBar').innerHTML = barGraphSVG;
 }
 
@@ -139,6 +139,6 @@ export function displayProjectBarGraph(xpTransaction) {
     if (!rowD) return;
     rowD.innerHTML = `
         <h2 style="margin-bottom: 16px;">XP by Project</h2>
-        ${createSecondBarGraph(xpTransaction, { barColor: '#B76E79' })}
+        ${createProjectBarGraph(xpTransaction, { barColor: '#B76E79' })}
     `;
 }

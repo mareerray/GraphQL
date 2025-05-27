@@ -46,15 +46,14 @@ html,body{
 #rowD {
     display: flex;
     flex-direction: column;    
-    align-items: center;       /* Center horizontally */
-    justify-content: center;   /* Center vertically */
+    align-items: center;       
+    justify-content: center;   
     border: 2px solid #555;            
     border-radius: 12px;  
     color: #333;               
     margin: 0 auto;                    
     padding: 16px;       
     width: 100%;   
-    max-width: 900px;                      
     box-shadow: 0 2px 12px rgba(98, 22, 212, 0.06); 
     box-sizing: border-box;
     transition: padding 0.2s, border-radius 0.2s;
@@ -72,7 +71,7 @@ html,body{
 }
 
 #graphExp svg {
-    transform: translateX(33px); /* Adjust as needed */
+    transform: translateX(33px); 
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
@@ -81,7 +80,7 @@ html,body{
 
 #rowD svg {
     width: 100%;
-    max-width: 900px;
+    max-width: 850px;
     height: auto;
     display: block;
     margin: 0 auto;
@@ -157,8 +156,8 @@ h2 {
 
 .avatar-img {
     width: 100%;
-    max-width: 350px;    /* Or 300px for desktop, adjust as needed */
-    aspect-ratio: 1 / 1; /* Keeps it perfectly square */
+    max-width: 350px;    
+    aspect-ratio: 1 / 1; 
     border-radius: 50%;
     object-fit: cover;
     box-shadow: 0 2px 8px #0002;
@@ -218,12 +217,12 @@ h2 {
 /* Navbar Styling */
 #nav-bar {
     display: flex;
-    justify-content: space-between; /* Space out elements */
-    align-items: center; /* Align items vertically */
-    padding: 10px 20px; /* Add padding */
-    background-color: transparent; /* Background color for navbar */
-    color: #333; /* Text color */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 10px 20px; 
+    background-color: transparent; 
+    color: #333; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
     position: fixed;
     top: 0;
     left: 0;
@@ -238,7 +237,6 @@ h2 {
 }
 
 #nav-bar a {
-    /* color: #8a68cdcf; */
     color: #2F343B; 
     text-decoration: underline;
     font-weight: bold;
@@ -248,7 +246,7 @@ h2 {
 
 #logout-button {
     background-color: #D69A6D;
-    color: #4e5561; /* Button text color */
+    color: #4e5561; 
     font-weight: bold;
     border: none;
     border-radius: 5px;
@@ -258,14 +256,14 @@ h2 {
 }
 
 #logout-button:hover {
-    background-color: #8a68cdcf; /* Darker shade on hover */
+    background-color: #8a68cdcf; 
 }
 
 /* Footer */
 
 #footer {
     display: flex;
-    flex-wrap: wrap; /* Allow items to wrap */
+    flex-wrap: wrap; 
     justify-content: space-between;           
     align-items: center;              
     padding: 10px 20px;
@@ -291,7 +289,7 @@ h2 {
 #footer nav ul {
     display: flex;
     list-style: none;
-    align-items: center; /* Center links horizontally */
+    align-items: center; 
     margin: 0 40px;
     padding: 0 20px;
     gap: 10px;

@@ -1,6 +1,6 @@
 import { formatDisplayDate, getLastPathSegment, formatMonthYear } from './utils.js';
 
-export function createLineGraph(xpTransactions, options = {}) {
+export function createProgressLineGraph(xpTransactions, options = {}) {
     if (!xpTransactions || xpTransactions.length === 0) {
         return '<p class="no-data">No XP data available</p>';
     }
@@ -202,7 +202,7 @@ function getMarkerColor(path) {
 
 // --- First Bar Graph --- //
 
-export function createBarGraph(auditData, options = {}) {
+export function createAuditBarGraph(auditData, options = {}) {
     // auditData: { totalUp, totalDown }
     // options: { width, height, barColors, ... }
 
@@ -245,7 +245,7 @@ export function createBarGraph(auditData, options = {}) {
 
 // --- Second Bar Graph --- //
 
-export function createSecondBarGraph(xpTransaction, options = {}) {
+export function createProjectBarGraph(xpTransaction, options = {}) {
 // Aggregate XP by project (excluding piscine/checkpoint)
     const projectXP = {};
     xpTransaction.forEach(tx => {
@@ -267,28 +267,33 @@ export function createSecondBarGraph(xpTransaction, options = {}) {
 
     const config = {
         width: 850,
-        height: 300,
+        height: 400,
         barColor: '#B76E79',
         ...options
     };
+    const topMargin = 120;    // space for rotated labels above bars
+    const bottomMargin = 30; // space at bottom for XP values
+    const barAreaHeight = config.height - topMargin - bottomMargin;
+
     const barWidth = (config.width - 60) / labels.length;
     const maxValue = Math.max(...values) * 1.1;
 
     let bars = '';
 
     labels.forEach((label, i) => {
-        const barHeight = (values[i] / maxValue) * (config.height - 60);
+        const barHeight = (values[i] / maxValue) * barAreaHeight;
         const x = 40 + i * barWidth;
-        const y = config.height - barHeight - 30;
+        const y = config.height - barHeight - bottomMargin; // position from bottom
         bars += `
         <rect x="${x}" y="${y}" width="${barWidth - 10}" height="${barHeight}" fill="${config.barColor}" rx="5"/>
-        <text x="${x + (barWidth - 10) / 2}" y="${y - 25}" text-anchor="middle" font-size="12" fill="#333">(${label})</text>
+        <text x="${x + (barWidth - 10) / 2}" y="${y -25}" text-anchor="end" font-size="12" fill="#333" 
+        transform="rotate(-270 ${x + (barWidth - 10) / 2} ${y - 25})">${label}</text>
         <text x="${x + (barWidth - 10) / 2}" y="${y - 8}" text-anchor="middle" font-size="12" fill="#333">${values[i]}</text>
         `;
     });
 
     return `
-        <svg width="100%" height="auto" viewBox="0 0 ${config.width} ${config.height}" aria-label="XP by Project">
+        <svg width="100%" height="${config.height}" viewBox="0 0 ${config.width} ${config.height}" aria-label="XP by Project">
         ${bars}
         </svg>
     `;
