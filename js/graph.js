@@ -45,7 +45,7 @@ export function createProgressLineGraph(xpTransactions, options = {}) {
     // Config with defaults; 
     // can be overridden if "options" or a new object of config is passed
     const config = {
-        width: 1000,
+        width: 1200,
         height: 400,
         padding: 60,
         lineColor: '#8968CD',   
@@ -122,7 +122,7 @@ export function createProgressLineGraph(xpTransactions, options = {}) {
         `;
     });
 
-    const legendWidth = 320;
+    const legendWidth = 325;
     const legendX = (config.width - legendWidth) / 2;
     const legendY = config.height - 23; // move further down if needed
 
