@@ -1,5 +1,7 @@
 # GraphQL Profile Dashboard
 
+https://mareerray.github.io/GraphQL/
+
 A personal profile dashboard built with JavaScript, GraphQL, and SVG, allowing students to visualize their school journey and achievements. This project demonstrates authentication via JWT, data querying from a GraphQL API, and dynamic SVG graph generation.
 
 ---
